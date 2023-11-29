@@ -1,19 +1,34 @@
 import React from 'react'
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 
 class Header extends React.Component {
 
+    constructor(props){
+        super(props);
+    }
+
+    _getSymbol(symbol){
+        if (symbol == "plus"){
+            return <AntDesign name={"plus"} size={40} style={styles.Icon}/>
+        }
+        else if (symbol == "back"){
+            return <AntDesign name={"left"} size={40} style={styles.Icon}/>
+        }
+    }
+
     render() {
-    
         return (
             <View style={styles.container}>
                 <View style={styles.titleBox} >
-                    <Text style={styles.title}>Mes cours :</Text>
+                    <Text style={styles.title}>{this.props.headerText}</Text>
                 </View>
                 <View style={styles.plusBox} >
-
+                    <TouchableOpacity onPress={() => this.props.navOption()}>
+                        {this._getSymbol(this.props.headerSymbol)}
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -28,7 +43,9 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor : '#404E7C',
+        backgroundColor : '#71B48D',
+        borderBottomWidth : 4,
+        borderColor: '#295B3E',
     },
     titleBox:{
         flex:4,
@@ -38,14 +55,16 @@ const styles = StyleSheet.create({
     plusBox:{
         flex:1,
         height: '100%',
-        backgroundColor : 'yellow',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     title:{
         marginLeft: 10,
         fontSize : 30,
         fontFamily: 'AmericanTypewriter-Bold',
-        color : '#FAEBF2'
-    }
+        color : 'white'
+    },
+    Icon:{
+        color:'white',
+    },
   });
-
-  

@@ -1,12 +1,13 @@
 import React from 'react'
-import { StyleSheet, SafeAreaView, View, Text, Touchable, TouchableOpacity} from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text} from 'react-native';
 
 import Header from './Header'
+import Form from './Form/Form'
 
-class ListBorder extends React.Component {
+class AlterRevision extends React.Component {
 
-    _alterRevision = () =>{
-        this.props.navigation.navigate('alterRevision', {id : null})
+    _getHome = () =>{
+        this.props.navigation.navigate('revisions', {id : null})
     }
 
     render() {
@@ -14,17 +15,17 @@ class ListBorder extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerBox} >
-                    <Header headerText={'RÉVISIONS'} headerSymbol={'plus'} navOption ={this._alterRevision}/>
+                    <Header headerText={'MODIFIER'} headerSymbol={'back'} navOption = {this._getHome}/>
                 </View>
-                <View style={styles.ListBox}>
-                    <Text>List</Text>
+                <View style={styles.formBox}>
+                    <Form/>
                 </View>
             </SafeAreaView>
         )
     }
 }
 
-export default ListBorder
+export default AlterRevision
 
 const styles = StyleSheet.create({
     container: {
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         width:'100%',
         backgroundColor :'#404E7C',
     },
-    ListBox: {
+    formBox: {
         flex:9,
         width:'100%',
         backgroundColor :'white',
