@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
+import DatePicker from 'react-native-date-picker'
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 import ItemRevision from './itemRevision';
 import AddRevision from './addRevision';
@@ -10,6 +12,10 @@ class Form extends React.Component {
         super(props);
         this.title = "";
         this.itemRevisionList = {1: false, 3: false};
+        this.state ={
+            open : false,
+            date : new Date(),
+        }
     }
 
     _setTitle(text){
@@ -40,7 +46,6 @@ class Form extends React.Component {
     }
 
     _getItemRevisions(){
-        console.log("render")
         keys  = Object.keys(this.itemRevisionList)
         keys = keys.map((item) => parseInt(item, 10));
         data = []
@@ -52,6 +57,7 @@ class Form extends React.Component {
                     done={this.itemRevisionList[keys[key].toString()]} 
                     changeValidation={this._changeValidation.bind(this)} 
                     removeItem={this._removeItem.bind(this)}
+                    date={this.state.date}
                 />
             )
         }
@@ -68,7 +74,22 @@ class Form extends React.Component {
                 />
                 <View style={styles.startDateContainer}>
                     <Text style={styles.dateJ0Title}>Date J0 :</Text>
-                    <Text style={styles.dateJ0Actual}>01/08/2000</Text>
+                    <View style={styles.dateBox}>
+                        <Text style={styles.dateJ0Actual}>{this.state.date.toLocaleDateString('en-GB')}</Text>
+                        <TouchableOpacity style={styles.calendarButton} onPress={() => this.setState({open:true})}>
+                            <AntDesign name={"calendar"} size={20} style={styles.calendarIcon}/>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <DatePicker modal mode={"date"} open={this.state.open} date={this.state.date}
+                        onConfirm={(date) => {
+                            this.setState({open: false, date: date})
+                            
+                        }}
+                        onCancel={() => {
+                            this.setState({open: false})
+                        }}
+                    />
                 </View>
                 <View style={styles.itemRevisionContainer}>
                     {this._getItemRevisions()}
@@ -118,12 +139,28 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         paddingRight : 5,
     },
+    dateBox:{
+        flex:1,
+        paddingLeft:5,
+        flexDirection:'row',
+        alignItems:'center',
+    },
     dateJ0Actual:{
         fontSize:17,
         fontFamily: 'AmericanTypewriter-Bold',
         color: '#71B48D',
-        flex:1,
-        paddingLeft:5,
+    },
+    calendarButton:{
+        backgroundColor:'#71B48D',
+        borderRadius: 4,
+        width: 25,
+        height: 25,
+        justifyContent:'center',
+        alignItems:'center',
+        marginLeft : 10,
+    },
+    calendarIcon: {
+        color: 'white',
     },
     sendButtons:{
         alignItems: 'center',

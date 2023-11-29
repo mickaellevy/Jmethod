@@ -28,7 +28,7 @@ class ItemRevision extends React.Component {
       }
 
     _getDate(){
-        var date= new Date();
+        var date= this.props.date;
         date = this._dateAddDays(this.props.revisionTime,date);
         return date.toLocaleDateString('en-GB');
     }
