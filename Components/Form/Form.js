@@ -1,10 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Animated, ScrollView} from 'react-native';
 import DatePicker from 'react-native-date-picker'
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 import ItemRevision from './itemRevision';
 import AddRevision from './addRevision';
+
+import {runInvalidAnimation} from '../../Animations/animationsUtils'
 
 class Form extends React.Component {
 
@@ -15,12 +17,15 @@ class Form extends React.Component {
         this.state ={
             open : false,
             date : new Date(),
+            errorMessage: "",
+            centerPosition: new Animated.Value(0)
         }
     }
 
     _setTitle(text){
         this.title = text
     }
+
     _placeholder(){
         console.log('wouhou')
     }
@@ -64,9 +69,26 @@ class Form extends React.Component {
         return data
     }
 
+    _validate(){
+        if(this.title != ""){
+            if(Object.keys(this.itemRevisionList).length != 0){
+                this.setState({errorMessage: ''})
+                console.log("go")
+            }
+            else {
+                this.setState({errorMessage: 'Pas de révisions'})
+                runInvalidAnimation(this.state.centerPosition, 5)
+            }
+        }
+        else{
+            this.setState({errorMessage: 'Pas de titre du cours'})
+            runInvalidAnimation(this.state.centerPosition, 5)
+        }
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container} alwaysBounceVertical={false}>
                 <TextInput
                     style={styles.titleInput}
                     placeholder='Nom du cours'
@@ -96,14 +118,19 @@ class Form extends React.Component {
                     <AddRevision addItem={this._addItem.bind(this)}/>
                 </View>
                 <View style={styles.sendButtons}>
-                    <TouchableOpacity style={styles.validateButton} onPress={() => this._placeholder()}>
-                        <Text style={styles.validateText}>VALIDER</Text>
-                    </TouchableOpacity>
+                    <View style={styles.validateButtonBox}>
+                        <Text style={styles.errorMessageSend}>{this.state.errorMessage}</Text>
+                        <Animated.View style={{left:this.state.centerPosition}}>
+                            <TouchableOpacity style={styles.validateButton} onPress={() => this._validate()}>
+                                <Text style={styles.validateText}>VALIDER</Text>
+                            </TouchableOpacity>
+                        </Animated.View>
+                    </View>
                     <TouchableOpacity style={styles.deleteButton} onPress={() => this._placeholder()}>
                         <Text style={styles.validateText}>SUPPRIMER</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -164,9 +191,19 @@ const styles = StyleSheet.create({
     },
     sendButtons:{
         alignItems: 'center',
-        height:90,
+        height:100,
         justifyContent: 'space-around',
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        marginBottom:40,
+    },
+    validateButtonBox:{
+        width: '100%',
+    },
+    errorMessageSend:{
+        fontFamily:"americanTypewriter",
+        fontSize: 10,
+        color: '#D56062',
+        marginLeft: 10,
     },
     validateButton:{
         backgroundColor:'#71B48D',

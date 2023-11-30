@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Animated, Easing} from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Animated} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+import {runInvalidAnimation} from '../../Animations/animationsUtils'
 
 class AddRevision extends React.Component {
 
@@ -14,56 +15,21 @@ class AddRevision extends React.Component {
           }
     }
 
-    _runInvalidAnnimation() {
-        Animated.sequence([
-        Animated.timing(
-          this.state.centerPosition,
-          {
-            toValue: 5,
-            duration: 50, // Le temps est en milliseconds ici (3000ms = 3sec)
-            easing: Easing.linear,
-            useNativeDriver: false,
-          }
-        ),
-        Animated.timing(
-            this.state.centerPosition,
-            {
-              toValue: -5,
-              duration: 100, // Le temps est en milliseconds ici (3000ms = 3sec)
-              easing: Easing.linear,
-              useNativeDriver: false,
-            }
-          ),
-          Animated.timing(
-            this.state.centerPosition,
-            {
-              toValue: 5,
-              duration: 100, // Le temps est en milliseconds ici (3000ms = 3sec)
-              easing: Easing.linear,
-              useNativeDriver: false,
-            }
-          ),
-          Animated.timing(
-            this.state.centerPosition,
-            {
-              toValue: 0,
-              duration: 50, // Le temps est en milliseconds ici (3000ms = 3sec)
-              easing: Easing.linear,
-              useNativeDriver: false,
-            }
-          )
-        ]).start() // N'oubliez pas de lancer votre animation avec la fonction start()
-    }
     
     _setNewNumber(text){
         if (text != ""){
             let value = parseInt(text,10)
             this.value = value
-            if (isNaN(this.value)){
-                this.displayErrorMessage = "Ce champ n'est pas valide : insérez un nombre"
+            if (!isNaN(this.value)){
+                if (this.value >=0){
+                    this.displayErrorMessage = ""
+                }
+                else{
+                    this.displayErrorMessage = "Ce champ n'est pas valide : insérez un nombre positif"
+                }
             }
             else {
-                this.displayErrorMessage = ""
+                this.displayErrorMessage = "Ce champ n'est pas valide : insérez un nombre"
             }
         }
         else{
@@ -73,17 +39,17 @@ class AddRevision extends React.Component {
     }
 
     _validateItem(){
-        if (this.value != undefined && !isNaN(this.value)){
+        if (this.value != undefined && !isNaN(this.value) && this.value>=0){
             this.props.addItem(this.value)
             this.value = NaN
             this.textInput.clear()
         }
         else {
-            this._runInvalidAnnimation()
+            runInvalidAnimation(this.state.centerPosition, 5)
         }
     }
 
-    
+
     render() {
         return (
             <View style={styles.maxiContainer}>
