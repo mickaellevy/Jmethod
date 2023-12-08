@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, View} from 'react-native';
+import { StyleSheet, View, Text} from 'react-native';
 
 
-class ListRevision extends React.Component {
+class emptyList extends React.Component {
 
     constructor(props){
         super(props)
@@ -13,20 +13,20 @@ class ListRevision extends React.Component {
     
         return (
             <View style={styles.container}>
-
+                
             </View>
         )
     }
 }
 
-export default ListRevision
+export default emptyList
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor : 'red',
+        backgroundColor : 'blue',
     },
   });
 

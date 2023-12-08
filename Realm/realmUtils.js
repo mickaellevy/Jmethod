@@ -29,7 +29,7 @@ export function createNewRevision(revisionName, revisionJ0, revisionList){
 
 export function getAllRevision(){
     const revision = realm.objects("revision");
-    console.log(revision);   
+    return revision;   
 }
 
 export function deleteAllRevision(){

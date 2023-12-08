@@ -13,7 +13,6 @@ class Form extends React.Component {
 
     constructor(props){
         super(props);
-        console.log(props)
         this.itemRevisionList = {0: false, 1: false, 3: false, 7: false, 15: false, 30: false};
         this.state ={
             title : "",
@@ -40,7 +39,6 @@ class Form extends React.Component {
     }
 
     _changeValidation(index, bool){
-        console.log(index, bool)
         const newItemRevisionList = { ...this.itemRevisionList };
         newItemRevisionList[index.toString()] = bool;
         this.setState({ itemRevisionList: newItemRevisionList });
@@ -62,7 +60,6 @@ class Form extends React.Component {
     }
 
     _getItemRevisions(){
-        console.log(this.itemRevisionList)
         keys  = Object.keys(this.itemRevisionList)
         keys = keys.map((item) => parseInt(item, 10));
         data = []
@@ -78,7 +75,6 @@ class Form extends React.Component {
                 />
             )
         }
-        console.log(data)
         return data
     }
 
@@ -97,7 +93,7 @@ class Form extends React.Component {
             if(Object.keys(this.itemRevisionList).length != 0){
                 this.setState({errorMessage: ''})
                 createNewRevision(this.state.title, this.state.date, this.itemRevisionList)
-                console.log("go")
+                this.props.navOption()
             }
             else {
                 this.setState({errorMessage: 'Pas de révisions'})

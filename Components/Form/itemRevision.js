@@ -31,16 +31,11 @@ class ItemRevision extends React.Component {
     }
 
     _switchValidateIcon(){
-        console.log(this.props)
         this.props.changeValidation(this.props.revisionTime, !this.props.done);
     }
 
-    componentDidUpdate(){
-        
-    }
 
     render() {
-
         return (
             <View style={styles.container}>
                 <Text style={styles.revisionTime}>J{this.props.revisionTime}</Text>
