@@ -7,7 +7,7 @@ import Form from './Form/Form'
 class AlterRevision extends React.Component {
 
     _getHome = () =>{
-        this.props.navigation.navigate('revisions', {id : null})
+        this.props.navigation.navigate('revisions')
     }
 
     render() {
@@ -18,7 +18,7 @@ class AlterRevision extends React.Component {
                     <Header headerText={'MODIFIER'} headerSymbol={'back'} navOption = {this._getHome}/>
                 </View>
                 <View style={styles.formBox}>
-                    <Form/>
+                    <Form id={"abc"} title={"hello"} dateJ0={new Date()} revisionList={{ 3: false, 7: false, 15: false, 30: false}}/>
                 </View>
             </SafeAreaView>
         )

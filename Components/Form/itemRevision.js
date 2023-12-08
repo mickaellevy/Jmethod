@@ -7,16 +7,13 @@ class ItemRevision extends React.Component {
 
     constructor(props){
         super(props);
-        this.state={
-            done : this.props.done
-        }
     }
 
     _getDoneIcon(){
-        if (this.state.done==true){
+        if (this.props.done==true){
             return <AntDesign name={"check"} size={27} style={styles.IconYes}/>
         }
-        else if (this.state.done==false){
+        else if (this.props.done==false){
             return <AntDesign name={"close"} size={27} style={styles.IconNo}/>
         }
     }
@@ -29,20 +26,21 @@ class ItemRevision extends React.Component {
 
     _getDate(){
         var date= this.props.date;
-        date = this._dateAddDays(this.props.revisionTime,date);
+        date = this._dateAddDays(this.props.revisionTime, date);
         return date.toLocaleDateString('en-GB');
     }
 
     _switchValidateIcon(){
-        console.log("hello")
-        this.setState({done: !this.state.done});
+        console.log(this.props)
+        this.props.changeValidation(this.props.revisionTime, !this.props.done);
     }
 
     componentDidUpdate(){
-        this.props.changeValidation(this.props.revisionTime, this.state.done);
+        
     }
 
     render() {
+
         return (
             <View style={styles.container}>
                 <Text style={styles.revisionTime}>J{this.props.revisionTime}</Text>

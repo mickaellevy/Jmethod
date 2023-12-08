@@ -7,32 +7,43 @@ import ItemRevision from './itemRevision';
 import AddRevision from './addRevision';
 
 import {runInvalidAnimation} from '../../Animations/animationsUtils'
+import {createNewRevision, deleteAllRevision} from '../../Realm/realmUtils'
 
 class Form extends React.Component {
 
     constructor(props){
         super(props);
-        this.title = "";
-        this.itemRevisionList = {1: false, 3: false};
+        console.log(props)
+        this.itemRevisionList = {0: false, 1: false, 3: false, 7: false, 15: false, 30: false};
         this.state ={
+            title : "",
             open : false,
             date : new Date(),
             errorMessage: "",
             centerPosition: new Animated.Value(0)
         }
+        if( props.id != ""){
+            this.itemRevisionList = props.revisionList;
+            this.state ={
+                title : props.title,
+                date : props.dateJ0,
+            }
+        }
     }
 
     _setTitle(text){
-        this.title = text
+        this.setState({title : text})
     }
 
     _placeholder(){
-        console.log('wouhou')
+        deleteAllRevision()
     }
 
     _changeValidation(index, bool){
+        console.log(index, bool)
         const newItemRevisionList = { ...this.itemRevisionList };
         newItemRevisionList[index.toString()] = bool;
+        this.setState({ itemRevisionList: newItemRevisionList });
         this.itemRevisionList = newItemRevisionList;
     }
 
@@ -51,6 +62,7 @@ class Form extends React.Component {
     }
 
     _getItemRevisions(){
+        console.log(this.itemRevisionList)
         keys  = Object.keys(this.itemRevisionList)
         keys = keys.map((item) => parseInt(item, 10));
         data = []
@@ -66,13 +78,25 @@ class Form extends React.Component {
                 />
             )
         }
+        console.log(data)
         return data
     }
 
+    _displayDelete(){
+        if (this.props.id != ""){
+            return (
+                <TouchableOpacity style={styles.deleteButton} onPress={() => this._placeholder()}>
+                        <Text style={styles.validateText}>SUPPRIMER</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     _validate(){
-        if(this.title != ""){
+        if(this.state.title != ""){
             if(Object.keys(this.itemRevisionList).length != 0){
                 this.setState({errorMessage: ''})
+                createNewRevision(this.state.title, this.state.date, this.itemRevisionList)
                 console.log("go")
             }
             else {
@@ -86,13 +110,26 @@ class Form extends React.Component {
         }
     }
 
+    _resetValues(){
+        if (this.props.id == ""){
+            this.itemRevisionList = {0: false, 1: false, 3: false, 7: false, 15: false, 30: false};
+            this.textInput.clear()
+            this.setState({date : new Date(), title:""})
+        } else {
+            this.itemRevisionList = this.props.revisionList;
+            this.setState({date : this.props.dateJ0, title: this.props.title})
+        }
+    }
+
     render() {
         return (
             <ScrollView style={styles.container} alwaysBounceVertical={false}>
                 <TextInput
                     style={styles.titleInput}
                     placeholder='Nom du cours'
+                    value={this.state.title}
                     onChangeText={(text) => this._setTitle(text)}
+                    ref={input => { this.textInput = input }}
                 />
                 <View style={styles.startDateContainer}>
                     <Text style={styles.dateJ0Title}>Date J0 :</Text>
@@ -126,9 +163,10 @@ class Form extends React.Component {
                             </TouchableOpacity>
                         </Animated.View>
                     </View>
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => this._placeholder()}>
-                        <Text style={styles.validateText}>SUPPRIMER</Text>
+                    <TouchableOpacity style={styles.resetButton} onPress={() => this._resetValues()}>
+                        <Text style={styles.validateText}>RESET</Text>
                     </TouchableOpacity>
+                    {this._displayDelete()}
                 </View>
             </ScrollView>
         )
@@ -191,19 +229,21 @@ const styles = StyleSheet.create({
     },
     sendButtons:{
         alignItems: 'center',
-        height:100,
-        justifyContent: 'space-around',
+        //height:100,
+        //justifyContent: 'space-around',
         paddingHorizontal:10,
         marginBottom:40,
     },
     validateButtonBox:{
         width: '100%',
+        marginBottom:9,
     },
     errorMessageSend:{
         fontFamily:"americanTypewriter",
         fontSize: 10,
         color: '#D56062',
         marginLeft: 10,
+        marginBottom: 2,
     },
     validateButton:{
         backgroundColor:'#71B48D',
@@ -213,6 +253,16 @@ const styles = StyleSheet.create({
         borderWidth : 2,
         borderRadius : 5,
         borderColor: '#295B3E'
+    },
+    resetButton:{
+        backgroundColor:'#8193CC',
+        width: '100%',
+        height:35,
+        justifyContent:'center',
+        borderWidth : 2,
+        borderRadius : 5,
+        borderColor: '#404E7C',
+        marginBottom:9,
     },
     deleteButton:{
         backgroundColor:'#D56062',

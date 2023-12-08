@@ -2,8 +2,14 @@ import React from 'react'
 import { StyleSheet, SafeAreaView, View, Text, Touchable, TouchableOpacity} from 'react-native';
 
 import Header from './Header'
+import ListRevision from './ListRevision';
 
 class ListBorder extends React.Component {
+
+    constructor(props){
+        super(props)
+        
+    }
 
     _alterRevision = () =>{
         this.props.navigation.navigate('alterRevision', {id : null})
@@ -17,7 +23,7 @@ class ListBorder extends React.Component {
                     <Header headerText={'RÉVISIONS'} headerSymbol={'plus'} navOption ={this._alterRevision}/>
                 </View>
                 <View style={styles.ListBox}>
-                    <Text>List</Text>
+                    <ListRevision/>
                 </View>
             </SafeAreaView>
         )
