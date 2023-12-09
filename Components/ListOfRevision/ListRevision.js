@@ -8,7 +8,20 @@ class ListRevision extends React.Component {
 
     constructor(props){
         super(props)
-        //console.log(this.props['revisions'][0])
+        console.log(props['revisions'][0])
+        this.revisions = this._sortList(props['revisions'])
+    }
+
+    _sortList(listToSort) {
+        let newListToSort = listToSort.map(item => ({ ...item })); // Create a new array with copies of items
+        for (i=0; i< newListToSort.length; i++) {
+            for (j=0; j<newListToSort.length -1; j++){
+                if (newListToSort[j]['nextRevIn']>newListToSort[j+1]['nextRevIn']){
+                    [newListToSort[j],newListToSort[j+1]]=[newListToSort[j+1],newListToSort[j]]
+                }
+            }
+        }
+        return newListToSort
     }
 
 
@@ -17,8 +30,8 @@ class ListRevision extends React.Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.props.revisions}
-                    renderItem={({item})=> <RevisionLine name={item.name} dateJ0={item.dateJ0} revisionList={item.revisionList}/>}
+                    data={this.revisions}
+                    renderItem={({item})=> <RevisionLine name={item.name} nextRevIn={item.nextRevIn}/>}
                     keyExtractor={item => item.recordID}
                     style={styles.list}
                 />

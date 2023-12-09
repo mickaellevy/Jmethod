@@ -13,7 +13,7 @@ class Form extends React.Component {
 
     constructor(props){
         super(props);
-        this.itemRevisionList = {0: false, 1: false, 3: false, 7: false, 15: false, 30: false};
+        this.itemRevisionList = {0: false, 3: false, 7: false, 15: false, 30: false, 45: false, 60: false};
         this.state ={
             title : "",
             open : false,

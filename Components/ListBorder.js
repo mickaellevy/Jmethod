@@ -11,12 +11,41 @@ class ListBorder extends React.Component {
 
     constructor(props){
         super(props)
-        this.revisions = getAllRevision();
+        this.revisions = this._cleanRevision(getAllRevision())
     }
 
     _alterRevision = () =>{
         this.props.navigation.navigate('alterRevision', {id : null})
     }
+
+    _cleanRevision(listToClean){
+        let today = new Date()
+        let newListToClean = listToClean.map(item => ({ ...item })); // Create a new array with copies of items
+        for (let revision in newListToClean) {
+            newListToClean[revision]['revisionList'] = JSON.parse(newListToClean[revision]['revisionList']);
+            let dateJ0 = new Date(newListToClean[revision]['dateJ0'])
+            let nextRevIn = Infinity
+            for (let revisionDay in Object.keys(newListToClean[revision]['revisionList'])){
+                let key = Object.keys(newListToClean[revision]['revisionList'])[revisionDay]
+                if (newListToClean[revision]['revisionList'][key] == false){
+                    dateOfRev = this._dateAddDays(parseInt(key), dateJ0);
+                    thisRevIn = Math.floor((dateOfRev-today)/(1000*3600*24))+1
+                    if (thisRevIn < nextRevIn){
+                        nextRevIn = thisRevIn
+                    }
+                }
+            }
+            newListToClean[revision]['nextRevIn'] = nextRevIn
+        }
+        console.log(newListToClean)
+        return newListToClean;
+    }
+
+    _dateAddDays(a, b) {
+        var d = new Date(b || new Date());
+        d.setDate(d.getDate() + a);
+        return d;
+      }
 
     _displayList(){
         if (this.revisions.length==0){

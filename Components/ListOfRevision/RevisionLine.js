@@ -6,19 +6,50 @@ class RevisionLine extends React.Component {
 
     constructor(props){
         super(props)
+        this.globalFontColor;
+        this.titleFontColor;
+        this.arrowColor;
+        this.displayTimeToRev;
+        this.TimeToRevAnnounce;
     }
 
+    _displayNextRevCorrectly(){
+        if(this.props.nextRevIn==0){
+            this.globalFontColor= 'black';
+            this.titleFontColor= '#71B48D';
+            this.arrowColor='grey';
+            this.TimeToRevAnnounce= <Text style={styles.nextRevText}>Prochaine revision dans:</Text>;
+            this.displayTimeToRev= <Text style={[styles.nextRevDate,{color:this.globalFontColor}]}>Aujourd'hui</Text>
+        }else if(this.props.nextRevIn==Infinity){
+            this.globalFontColor= 'lightgrey';
+            this.titleFontColor= 'lightgrey';
+            this.arrowColor='lightgrey';
+            this.displayTimeToRev= <Text style={[styles.Archived,{color:this.globalFontColor}]}>Archivé</Text>
+        }else if (this.props.nextRevIn<0){
+            this.globalFontColor = '#D56062';
+            this.titleFontColor = '#D56062';
+            this.arrowColor = '#D56062';
+            this.TimeToRevAnnounce = <Text style={[styles.nextRevText,{color:this.globalFontColor}]}>Retard de :</Text>;
+            this.displayTimeToRev = <Text style={[styles.nextRevDate,{color:this.globalFontColor}]}>{-1*this.props.nextRevIn} jours</Text>
+        }else{
+            this.globalFontColor= 'black';
+            this.titleFontColor= '#71B48D';
+            this.arrowColor='grey';
+            this.TimeToRevAnnounce= <Text style={styles.nextRevText}>Prochaine revision dans:</Text>;
+            this.displayTimeToRev= <Text style={[styles.nextRevDate,{color:this.globalFontColor}]}>{this.props.nextRevIn} jours</Text>
+        }
+    }
 
     render() {
-    
+        this._displayNextRevCorrectly()
         return (
             <View style={styles.container}>
-                <Text style={styles.revisionName}>{this.props.name}</Text>
+                <Text style={[styles.revisionName, {color: this.titleFontColor}]}>{this.props.name}</Text>
                 <View style={styles.nextRevisionBox}>
-                    <Text style={styles.nextRevText}>Prochaine revision :</Text>
-                    <Text style={styles.nextRevDate}>3 jours</Text>
+                    {this.TimeToRevAnnounce}
+                    {this.displayTimeToRev}
                 </View>
-                <AntDesign name={"right"} size={35} style={styles.Icon}/>
+                <AntDesign name={"right"} size={35} style={[styles.Icon, {color:this.arrowColor}]}/>
             </View>
         )
     }
@@ -36,15 +67,15 @@ const styles = StyleSheet.create({
         borderColor:'#71B48D'
     },
     revisionName:{
-        width: '60%',
+        width: '50%',
         paddingLeft:5,
         fontSize:17,
         fontFamily: 'AmericanTypewriter-Bold',
-        color: '#71B48D',
     },
     nextRevisionBox:{
-        width:'30%',
+        width:'40%',
         height: '100%',
+        justifyContent:'center',
     },
     nextRevText:{
         fontFamily: 'AmericanTypewriter',
@@ -58,6 +89,11 @@ const styles = StyleSheet.create({
         fontSize:17,
         height:'70%',
         paddingTop:5,
+    },
+    Archived:{
+        fontFamily: 'AmericanTypewriter',
+        fontSize:17,
+        color:'lightgrey',
     },
     Icon:{
         width:'10%',
