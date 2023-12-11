@@ -14,9 +14,20 @@ class ListBorder extends React.Component {
         this.revisions = this._cleanRevision(getAllRevision())
     }
 
-    _alterRevision = () =>{
-        this.props.navigation.navigate('alterRevision', {id : null})
+    _alterRevision = (id) =>{
+        let goodRev;
+        for (let revision in this.revisions){
+            if (this.revisions[revision]["recordID"] == id){
+                goodRev = this.revisions[revision]
+            }
+        }
+        this.props.navigation.navigate('alterRevision', {id :id, name : goodRev.name, dateJ0:goodRev.dateJ0.toString(), revisionList: goodRev.revisionList})
     }
+
+    _alterRevisionEmpty = ()=>{
+        this.props.navigation.navigate('alterRevision', {id :""})
+
+    } 
 
     _cleanRevision(listToClean){
         let today = new Date()
@@ -37,7 +48,6 @@ class ListBorder extends React.Component {
             }
             newListToClean[revision]['nextRevIn'] = nextRevIn
         }
-        console.log(newListToClean)
         return newListToClean;
     }
 
@@ -51,7 +61,7 @@ class ListBorder extends React.Component {
         if (this.revisions.length==0){
             return <emptyList/>
         }else{
-            return <ListRevision revisions={this.revisions}/>
+            return <ListRevision revisions={this.revisions} navOption ={this._alterRevision}/>
         }
     }
 
@@ -59,7 +69,7 @@ class ListBorder extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerBox} >
-                    <Header headerText={'RÉVISIONS'} headerSymbol={'plus'} navOption ={this._alterRevision}/>
+                    <Header headerText={'RÉVISIONS'} headerSymbol={'plus'} navOption ={this._alterRevisionEmpty}/>
                 </View>
                 <View style={styles.ListBox}>
                     {this._displayList()}

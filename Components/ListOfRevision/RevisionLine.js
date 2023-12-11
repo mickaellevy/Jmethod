@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Text} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 class RevisionLine extends React.Component {
@@ -40,17 +40,21 @@ class RevisionLine extends React.Component {
         }
     }
 
+    _navigateToDetail(){
+        this.props.navOption(this.props.id);
+    }
+
     render() {
         this._displayNextRevCorrectly()
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={() => this._navigateToDetail()}>
                 <Text style={[styles.revisionName, {color: this.titleFontColor}]}>{this.props.name}</Text>
                 <View style={styles.nextRevisionBox}>
                     {this.TimeToRevAnnounce}
                     {this.displayTimeToRev}
                 </View>
                 <AntDesign name={"right"} size={35} style={[styles.Icon, {color:this.arrowColor}]}/>
-            </View>
+            </TouchableOpacity>
         )
     }
 }

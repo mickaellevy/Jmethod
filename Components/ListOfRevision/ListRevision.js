@@ -8,7 +8,6 @@ class ListRevision extends React.Component {
 
     constructor(props){
         super(props)
-        console.log(props['revisions'][0])
         this.revisions = this._sortList(props['revisions'])
     }
 
@@ -31,7 +30,7 @@ class ListRevision extends React.Component {
             <View style={styles.container}>
                 <FlatList
                     data={this.revisions}
-                    renderItem={({item})=> <RevisionLine name={item.name} nextRevIn={item.nextRevIn}/>}
+                    renderItem={({item})=> <RevisionLine name={item.name} nextRevIn={item.nextRevIn} id={item.recordID} navOption ={this.props.navOption}/>}
                     keyExtractor={item => item.recordID}
                     style={styles.list}
                 />
