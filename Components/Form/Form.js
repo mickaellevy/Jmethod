@@ -7,7 +7,7 @@ import ItemRevision from './itemRevision';
 import AddRevision from './addRevision';
 
 import {runInvalidAnimation} from '../../Animations/animationsUtils'
-import {createNewRevision, deleteAllRevision} from '../../Realm/realmUtils'
+import {createNewRevision, modifyRevision, deleteRevision} from '../../Realm/realmUtils'
 
 class Form extends React.Component {
 
@@ -32,10 +32,6 @@ class Form extends React.Component {
 
     _setTitle(text){
         this.setState({title : text})
-    }
-
-    _placeholder(){
-        deleteAllRevision()
     }
 
     _changeValidation(index, bool){
@@ -81,7 +77,7 @@ class Form extends React.Component {
     _displayDelete(){
         if (this.props.id != ""){
             return (
-                <TouchableOpacity style={styles.deleteButton} onPress={() => this._placeholder()}>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => this._deleteRevision()}>
                         <Text style={styles.validateText}>SUPPRIMER</Text>
                 </TouchableOpacity>
             )
@@ -92,7 +88,11 @@ class Form extends React.Component {
         if(this.state.title != ""){
             if(Object.keys(this.itemRevisionList).length != 0){
                 this.setState({errorMessage: ''})
-                createNewRevision(this.state.title, this.state.date, this.itemRevisionList)
+                if(this.props.id==""){
+                    createNewRevision(this.state.title, this.state.date, this.itemRevisionList)
+                }else {
+                    modifyRevision(this.props.id, this.state.title, this.state.date, this.itemRevisionList)
+                }
                 this.props.navOption()
             }
             else {
@@ -115,6 +115,12 @@ class Form extends React.Component {
             this.itemRevisionList = this.props.revisionList;
             this.setState({date : this.props.dateJ0, title: this.props.title})
         }
+    }
+
+    _deleteRevision(){
+        console.log('delete')
+        deleteRevision(this.props.id)
+        this.props.navOption()
     }
 
     render() {

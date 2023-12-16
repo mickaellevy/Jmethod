@@ -32,9 +32,32 @@ export function getAllRevision(){
     return revision;   
 }
 
+export function deleteRevision(id){
+    const revision = realm.objects("revision").filtered('recordID = $0', id)
+    revision.forEach(rev => {
+        realm.write(() => {
+            realm.delete(rev);
+        });
+    })
+}
+
+export function modifyRevision(id, title, date, itemRevisionList){
+    const revision = realm.objects("revision").filtered('recordID = $0', id)
+    revision.forEach(rev => {
+        realm.write(() => {
+            realm.create("revision", {
+                recordID: id,
+                name: title,
+                dateJ0: date,
+                revisionList: JSON.stringify(itemRevisionList),
+            },
+            'modified');
+        });
+    })
+}
+
 export function deleteAllRevision(){
     const revision = realm.objects("revision");
-    console.log(revision); 
     revision.forEach(contact => {
         realm.write(() => {
             realm.delete(contact);

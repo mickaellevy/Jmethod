@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Text} from 'react-native';
 
 
-class emptyList extends React.Component {
+class EmptyList extends React.Component {
 
     constructor(props){
         super(props)
@@ -19,7 +19,7 @@ class emptyList extends React.Component {
     }
 }
 
-export default emptyList
+export default EmptyList
 
 const styles = StyleSheet.create({
     container: {

@@ -1,9 +1,9 @@
 import React from 'react'
-import { StyleSheet, SafeAreaView, View, Text, Touchable, TouchableOpacity} from 'react-native';
+import { StyleSheet, SafeAreaView, View} from 'react-native';
 
-import Header from './Header'
+import Header from './Header';
 import ListRevision from './ListOfRevision/ListRevision';
-import emptyList from './ListOfRevision/emptyList';
+import EmptyList from './ListOfRevision/emptyList';
 
 import { getAllRevision } from '../Realm/realmUtils';
 
@@ -26,7 +26,6 @@ class ListBorder extends React.Component {
 
     _alterRevisionEmpty = ()=>{
         this.props.navigation.navigate('alterRevision', {id :""})
-
     } 
 
     _cleanRevision(listToClean){
@@ -59,7 +58,7 @@ class ListBorder extends React.Component {
 
     _displayList(){
         if (this.revisions.length==0){
-            return <emptyList/>
+            return <EmptyList/>
         }else{
             return <ListRevision revisions={this.revisions} navOption ={this._alterRevision}/>
         }
